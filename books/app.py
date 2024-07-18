@@ -49,13 +49,23 @@ async def create_book(book: dict, response: Response, db: Session = Depends(get_
     response.status_code = 201
     return newbook
 
-# @router_v1.patch('/books/{book_id}')
-# async def update_book(book_id: int, book: dict, db: Session = Depends(get_db)):
-#     pass
+@router_v1.patch('/books/{book_id}')
+async def update_book(book_id: int, book_update: dict, db: Session = Depends(get_db)):
+    book = db.query(models.Book).filter(models.Book.id == book_id).first()
 
-# @router_v1.delete('/books/{book_id}')
-# async def delete_book(book_id: int, db: Session = Depends(get_db)):
-#     pass
+    for key, value in book_update.items():
+        setattr(book, key, value)
+    db.commit()
+    db.refresh(book)
+
+    return book
+@router_v1.delete('/books/{book_id}')
+async def delete_book(book_id: int, db: Session = Depends(get_db)):
+    book = db.query(models.Book).filter(models.Book.id == book_id).first()
+    db.delete(book)
+    db.commit()
+    
+    return {"message": f"Book with id {book_id} deleted"}
 
 app.include_router(router_v1)
 
