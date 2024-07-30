@@ -12,7 +12,6 @@ class Book(Base):
     year = Column(Integer, index=True)
     description = Column(String, index=True)
     summary = Column(String, index=True)
-    categories = Column(String, index=True) 
     is_published = Column(Boolean, index=True)
 
 
