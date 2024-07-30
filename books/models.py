@@ -10,5 +10,9 @@ class Book(Base):
     title = Column(String, index=True)
     author = Column(String, index=True)
     year = Column(Integer, index=True)
+    description = Column(String)
+    summary = Column(String)
+    categories = Column(String) 
     is_published = Column(Boolean, index=True)
+
 
