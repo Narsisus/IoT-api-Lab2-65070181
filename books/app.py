@@ -118,10 +118,11 @@ async def get_order(order_id: int, db: Session = Depends(get_db)):
 @router_v1.post('/orders')
 async def create_order(order: dict, response: Response, db: Session = Depends(get_db)):
     try:
+        # การแปลงข้อมูลจาก order['total_order'] เป็นอาร์เรย์ของชื่อเมนู
         neworder = models.Order(
-            total_order=order['total_order'], 
-            total_price=order['total_price'], 
-            comments=order['comments'], 
+            total_order=[item['menu_name'] for item in order['total_order']],  # ใช้ชื่อเมนู
+            total_price=order['total_price'],
+            comments=order['comments'],
             status=order['status']
         )
         db.add(neworder)
@@ -132,6 +133,7 @@ async def create_order(order: dict, response: Response, db: Session = Depends(ge
     except Exception as e:
         response.status_code = 400
         return {"message": f"เกิดข้อผิดพลาด: {str(e)}"}
+
 
 @router_v1.patch('/orders/{order_id}')
 async def update_order(order_id: int, order_update: dict, db: Session = Depends(get_db)):
