@@ -68,6 +68,82 @@ async def delete_book(book_id: int, db: Session = Depends(get_db)):
     
     return {"message": f"Book with id {book_id} deleted"}
 
+@router_v1.get('/cafes')
+async def get_cafes(db: Session = Depends(get_db)):
+    return db.query(models.Cafe).all()
+
+@router_v1.get('/cafes/{cafe_id}')
+async def get_cafe(cafe_id: int, db: Session = Depends(get_db)):
+    return db.query(models.Cafe).filter(models.Cafe.id == cafe_id).first()
+
+@router_v1.post('/cafes')
+async def create_cafe(cafe: dict, response: Response, db: Session = Depends(get_db)):
+
+    newcafe = models.Cafe(name=cafe['name'], price=cafe['price'], comments=cafe['comments'])
+    db.add(newcafe)
+    db.commit()
+    db.refresh(newcafe)
+    response.status_code = 201
+    return newcafe
+
+@router_v1.patch('/cafes/{cafe_id}')
+async def update_cafe(cafe_id: int, cafe_update: dict, db: Session = Depends(get_db)):
+    cafe = db.query(models.Cafe).filter(models.Cafe.id == cafe_id).first()
+
+    for key, value in cafe_update.items():
+        setattr(cafe, key, value)
+    db.commit()
+    db.refresh(cafe)
+
+    return cafe
+
+@router_v1.delete('/cafes/{cafe_id}')
+async def delete_cafe(cafe_id: int, db: Session = Depends(get_db)):
+    cafe = db.query(models.Cafe).filter(models.Cafe.id == cafe_id).first()
+    db.delete(cafe)
+    db.commit()
+    
+    return {"message": f"Cafe with id {cafe_id} deleted"}
+
+
+@router_v1.get('/orders')
+async def get_orders(db: Session = Depends(get_db)):
+    return db.query(models.order).all()
+
+@router_v1.get('/orders/{order_id}')
+async def get_order(order_id: int, db: Session = Depends(get_db)):
+    return db.query(models.order).filter(models.order.id == order_id).first()
+
+@router_v1.post('/orders')
+async def create_order(order: dict, response: Response, db: Session = Depends(get_db)):
+
+    neworder = models.order(name=order['name'], price=order['price'], comments=order['comments'], status=order['status'], cafe_id=order['cafe_id'])
+    db.add(neworder)
+    db.commit()
+    db.refresh(neworder)
+    response.status_code = 201
+    return neworder
+
+@router_v1.patch('/orders/{order_id}')
+async def update_order(order_id: int, order_update: dict, db: Session = Depends(get_db)):
+    order = db.query(models.order).filter(models.order.id == order_id).first()
+
+    for key, value in order_update.items():
+        setattr(order, key, value)
+    db.commit()
+    db.refresh(order)
+
+    return order
+
+
+@router_v1.delete('/orders/{order_id}')
+async def delete_order(order_id: int, db: Session = Depends(get_db)):
+    order = db.query(models.order).filter(models.order.id == order_id).first()
+    db.delete(order)
+    db.commit()
+    
+    return {"message": f"Order with id {order_id} deleted"}
+
 app.include_router(router_v1)
 
 if __name__ == '__main__':
