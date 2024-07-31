@@ -31,4 +31,3 @@ class Order(Base):
     total_price = Column(Integer, index=True)
     comments = Column(String, index=True)
     status = Column(String, index=True)
-    cafe_id = Column(Integer, ForeignKey('cafes.id'))
