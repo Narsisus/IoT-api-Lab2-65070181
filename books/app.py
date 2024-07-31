@@ -107,6 +107,7 @@ async def delete_cafe(cafe_id: int, db: Session = Depends(get_db)):
 
 
 @router_v1.get('/orders')
+
 async def get_orders(db: Session = Depends(get_db)):
     return db.query(models.Order).all()
 
@@ -117,7 +118,7 @@ async def get_order(order_id: int, db: Session = Depends(get_db)):
 @router_v1.post('/orders')
 async def create_order(order: dict, response: Response, db: Session = Depends(get_db)):
 
-    neworder = models.Order(name=order['name'], price=order['price'], comments=order['comments'], status=order['status'], cafe_id=order['cafe_id'])
+    neworder = models.Order(total_order=order['total_order'], total_price=order['total_price'], comments=order['comments'], status=order['status'], cafe_id=order['cafe_id'])
     db.add(neworder)
     db.commit()
     db.refresh(neworder)
@@ -134,7 +135,6 @@ async def update_order(order_id: int, order_update: dict, db: Session = Depends(
     db.refresh(order)
 
     return order
-
 
 @router_v1.delete('/orders/{order_id}')
 async def delete_order(order_id: int, db: Session = Depends(get_db)):
