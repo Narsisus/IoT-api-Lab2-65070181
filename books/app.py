@@ -108,16 +108,16 @@ async def delete_cafe(cafe_id: int, db: Session = Depends(get_db)):
 
 @router_v1.get('/orders')
 async def get_orders(db: Session = Depends(get_db)):
-    return db.query(models.order).all()
+    return db.query(models.Order).all()
 
 @router_v1.get('/orders/{order_id}')
 async def get_order(order_id: int, db: Session = Depends(get_db)):
-    return db.query(models.order).filter(models.order.id == order_id).first()
+    return db.query(models.Order).filter(models.Order.id == order_id).first()
 
 @router_v1.post('/orders')
 async def create_order(order: dict, response: Response, db: Session = Depends(get_db)):
 
-    neworder = models.order(name=order['name'], price=order['price'], comments=order['comments'], status=order['status'], cafe_id=order['cafe_id'])
+    neworder = models.Order(name=order['name'], price=order['price'], comments=order['comments'], status=order['status'], cafe_id=order['cafe_id'])
     db.add(neworder)
     db.commit()
     db.refresh(neworder)
@@ -126,7 +126,7 @@ async def create_order(order: dict, response: Response, db: Session = Depends(ge
 
 @router_v1.patch('/orders/{order_id}')
 async def update_order(order_id: int, order_update: dict, db: Session = Depends(get_db)):
-    order = db.query(models.order).filter(models.order.id == order_id).first()
+    order = db.query(models.Order).filter(models.Order.id == order_id).first()
 
     for key, value in order_update.items():
         setattr(order, key, value)
@@ -138,7 +138,7 @@ async def update_order(order_id: int, order_update: dict, db: Session = Depends(
 
 @router_v1.delete('/orders/{order_id}')
 async def delete_order(order_id: int, db: Session = Depends(get_db)):
-    order = db.query(models.order).filter(models.order.id == order_id).first()
+    order = db.query(models.Order).filter(models.Order.id == order_id).first()
     db.delete(order)
     db.commit()
     

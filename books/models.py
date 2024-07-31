@@ -2,6 +2,7 @@ from unicodedata import category
 from sqlalchemy import Boolean, Column, ForeignKey, Integer, String
 from sqlalchemy.dialects.postgresql import ARRAY
 from sqlalchemy.orm import relationship
+from sqlalchemy.sql.sqltypes import Enum as enum
 
 from database import Base
 
@@ -25,13 +26,17 @@ class Cafe(Base):
     price = Column(Integer, index=True)
     comments = Column(String, index=True)
 
-class order(Base):
+class OrderStatus(enum):
+    PENDING = "รอดำเนินการ"
+    COMPLETED = "ดำเนินการเสร็จสิ้น"
+
+class Order(Base):
     __tablename__ = 'orders'
 
     id = Column(Integer, primary_key=True, index=True)
     total_or = Column(ARRAY(String), index=True)
     total_price = Column(Integer, index=True)
     comments = Column(String, index=True)
-    status = Column(String, index=True)
+    status = Column(enum(OrderStatus), index=True)
     cafe_id = Column(Integer, ForeignKey('cafes.id'))
     cafe = relationship("Cafe", back_populates="orders")
