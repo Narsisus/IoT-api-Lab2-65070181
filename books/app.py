@@ -117,13 +117,21 @@ async def get_order(order_id: int, db: Session = Depends(get_db)):
 
 @router_v1.post('/orders')
 async def create_order(order: dict, response: Response, db: Session = Depends(get_db)):
-
-    neworder = models.Order(total_order=order['total_order'], total_price=order['total_price'], comments=order['comments'], status=order['status'], cafe_id=order['cafe_id'])
-    db.add(neworder)
-    db.commit()
-    db.refresh(neworder)
-    response.status_code = 201
-    return neworder
+    try:
+        neworder = models.Order(
+            total_order=order['total_order'], 
+            total_price=order['total_price'], 
+            comments=order['comments'], 
+            status=order['status']
+        )
+        db.add(neworder)
+        db.commit()
+        db.refresh(neworder)
+        response.status_code = 201
+        return neworder
+    except Exception as e:
+        response.status_code = 400
+        return {"message": f"เกิดข้อผิดพลาด: {str(e)}"}
 
 @router_v1.patch('/orders/{order_id}')
 async def update_order(order_id: int, order_update: dict, db: Session = Depends(get_db)):
