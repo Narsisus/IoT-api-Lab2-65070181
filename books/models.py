@@ -29,7 +29,7 @@ class order(Base):
     __tablename__ = 'orders'
 
     id = Column(Integer, primary_key=True, index=True)
-    total_order = Column(ARRAY(String), index=True)
+    total_or = Column(ARRAY(String), index=True)
     total_price = Column(Integer, index=True)
     comments = Column(String, index=True)
     status = Column(String, index=True)
