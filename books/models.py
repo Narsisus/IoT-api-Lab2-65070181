@@ -29,8 +29,8 @@ class order(Base):
     __tablename__ = 'orders'
 
     id = Column(Integer, primary_key=True, index=True)
-    name = Column(String, index=True)
-    price = Column(Integer, index=True)
+    total_order = Column(ARRAY(String), index=True)
+    total_price = Column(Integer, index=True)
     comments = Column(String, index=True)
     status = Column(String, index=True)
     cafe_id = Column(Integer, ForeignKey('cafes.id'))
