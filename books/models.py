@@ -1,7 +1,7 @@
 from unicodedata import category
 from sqlalchemy import Boolean, Column, ForeignKey, Integer, String
 from sqlalchemy.dialects.postgresql import ARRAY
-# # from sqlalchemy.orm import relationship
+from sqlalchemy.orm import relationship
 
 from database import Base
 
@@ -34,3 +34,4 @@ class order(Base):
     comments = Column(String, index=True)
     status = Column(String, index=True)
     cafe_id = Column(Integer, ForeignKey('cafes.id'))
+    cafe = relationship("Cafe", back_populates="orders")
