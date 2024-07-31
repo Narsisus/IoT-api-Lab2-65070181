@@ -1,4 +1,6 @@
+from unicodedata import category
 from sqlalchemy import Boolean, Column, ForeignKey, Integer, String
+from sqlalchemy.dialects.postgresql import ARRAY
 # from sqlalchemy.orm import relationship
 
 from database import Base
@@ -13,5 +15,6 @@ class Book(Base):
     description = Column(String, index=True)
     summary = Column(String, index=True)
     is_published = Column(Boolean, index=True)
+    categories = Column(ARRAY(String), index=True)
 
 
