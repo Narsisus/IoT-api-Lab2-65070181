@@ -22,7 +22,7 @@ class Cafe(Base):
     name = Column(String, index=True)
     price = Column(Integer, index=True)
     comments = Column(String, index=True)
-    imgpath = Column(String, index=True)
+    
 
 class Order(Base):
     __tablename__ = 'orders'
